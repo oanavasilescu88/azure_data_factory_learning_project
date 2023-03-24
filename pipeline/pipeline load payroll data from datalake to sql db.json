@@ -1,0 +1,34 @@
+{
+	"name": "pipeline load payroll data from datalake to sql db",
+	"properties": {
+		"activities": [
+			{
+				"name": "Data flow load payroll data to sql db",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "dataflow load payroll data from datalake to sql db",
+						"type": "DataFlowReference"
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2023-03-24T09:35:46Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

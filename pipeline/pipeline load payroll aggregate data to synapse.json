@@ -1,0 +1,53 @@
+{
+	"name": "pipeline load payroll aggregate data to synapse",
+	"properties": {
+		"activities": [
+			{
+				"name": "Data flow Aggregate Payroll to Synapse",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "dataflow aggregate nyc paroll data",
+						"type": "DataFlowReference",
+						"parameters": {
+							"df_param_fiscal_year": {
+								"value": "@pipeline().parameters.pl_param_fiscal_year",
+								"type": "Expression"
+							}
+						}
+					},
+					"staging": {
+						"linkedService": {
+							"referenceName": "LS_StorageAcct_Conn",
+							"type": "LinkedServiceReference"
+						},
+						"folderPath": "adlsnycpayroll-oana-v/dirstaging"
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			}
+		],
+		"parameters": {
+			"pl_param_fiscal_year": {
+				"type": "int",
+				"defaultValue": 2020
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-03-24T12:42:40Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

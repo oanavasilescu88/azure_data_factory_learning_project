@@ -1,0 +1,52 @@
+{
+	"name": "dataflow load title data to synpase",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_title_master_datalake",
+						"type": "DatasetReference"
+					},
+					"name": "SourceTitleDatalake"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_payroll_title_master_synapse",
+						"type": "DatasetReference"
+					},
+					"name": "SinkToTitleSynapse"
+				}
+			],
+			"transformations": [],
+			"scriptLines": [
+				"source(output(",
+				"          TitleCode as string,",
+				"          TitleDescription as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> SourceTitleDatalake",
+				"SourceTitleDatalake sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          TitleCode as string,",
+				"          TitleDescription as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     staged: true,",
+				"     allowCopyCommand: true,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> SinkToTitleSynapse"
+			]
+		}
+	}
+}
