@@ -1,0 +1,104 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "ADF-Project-Udacity"
+		},
+		"LS_AzureSQL_Conn_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_AzureSQL_Conn'"
+		},
+		"LS_AzureSQL_nycpayroll_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_AzureSQL_nycpayroll'"
+		},
+		"LS_StorageAcct_Conn_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'LS_StorageAcct_Conn'"
+		},
+		"LS_Synapse_Conn_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_Synapse_Conn'"
+		},
+		"LS_Synapse_nycpayroll_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_Synapse_nycpayroll'"
+		},
+		"LS_StorageAcct_Conn_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://additionalstorageacct.dfs.core.windows.net/"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "ADF-Project-Udacity_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"LS_AzureSQL_Conn_connectionString": {
+						"value": "[parameters('LS_AzureSQL_Conn_connectionString')]"
+					},
+					"LS_AzureSQL_nycpayroll_connectionString": {
+						"value": "[parameters('LS_AzureSQL_nycpayroll_connectionString')]"
+					},
+					"LS_StorageAcct_Conn_accountKey": {
+						"value": "[parameters('LS_StorageAcct_Conn_accountKey')]"
+					},
+					"LS_Synapse_Conn_connectionString": {
+						"value": "[parameters('LS_Synapse_Conn_connectionString')]"
+					},
+					"LS_Synapse_nycpayroll_connectionString": {
+						"value": "[parameters('LS_Synapse_nycpayroll_connectionString')]"
+					},
+					"LS_StorageAcct_Conn_properties_typeProperties_url": {
+						"value": "[parameters('LS_StorageAcct_Conn_properties_typeProperties_url')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "ADF-Project-Udacity_ArmTemplate_1",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'ADF-Project-Udacity_ArmTemplate_0')]"
+			]
+		}
+	]
+}

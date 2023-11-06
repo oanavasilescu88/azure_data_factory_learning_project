@@ -1,0 +1,27 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "ADF-Project-Udacity"
+		},
+		"LS_AzureSQL_Conn_connectionString": {
+			"value": ""
+		},
+		"LS_AzureSQL_nycpayroll_connectionString": {
+			"value": ""
+		},
+		"LS_StorageAcct_Conn_accountKey": {
+			"value": ""
+		},
+		"LS_Synapse_Conn_connectionString": {
+			"value": ""
+		},
+		"LS_Synapse_nycpayroll_connectionString": {
+			"value": ""
+		},
+		"LS_StorageAcct_Conn_properties_typeProperties_url": {
+			"value": "https://additionalstorageacct.dfs.core.windows.net/"
+		}
+	}
+}
