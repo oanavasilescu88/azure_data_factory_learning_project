@@ -31,6 +31,10 @@
 			"type": "string",
 			"defaultValue": "https://additionalstorageacct.dfs.core.windows.net/"
 		},
+		"tr_ingest_population_data_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/74d02aa7-18c6-4ce4-98e6-b7654fdb579f/resourceGroups/ADF_Project/providers/Microsoft.Storage/storageAccounts/additionalstorageacct"
+		},
 		"containerUri": {
 			"type": "string",
 			"metadata": "URI to storage account containing linked ARM templates"
@@ -93,6 +97,9 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					},
+					"tr_ingest_population_data_properties_typeProperties_scope": {
+						"value": "[parameters('tr_ingest_population_data_properties_typeProperties_scope')]"
 					}
 				}
 			},

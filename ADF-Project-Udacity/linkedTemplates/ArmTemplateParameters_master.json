@@ -23,6 +23,9 @@
 		"LS_StorageAcct_Conn_properties_typeProperties_url": {
 			"value": "https://additionalstorageacct.dfs.core.windows.net/"
 		},
+		"tr_ingest_population_data_properties_typeProperties_scope": {
+			"value": "/subscriptions/74d02aa7-18c6-4ce4-98e6-b7654fdb579f/resourceGroups/ADF_Project/providers/Microsoft.Storage/storageAccounts/additionalstorageacct"
+		},
 		"containerUri": {
 			"value": ""
 		},
