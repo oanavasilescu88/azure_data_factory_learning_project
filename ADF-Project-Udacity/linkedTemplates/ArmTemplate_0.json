@@ -933,6 +933,18 @@
 								"value": "@equals(activity('Get File Metadata').output.columnCount, 13)",
 								"type": "Expression"
 							},
+							"ifFalseActivities": [
+								{
+									"name": "Wrong no of columns - Fail",
+									"type": "Fail",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"message": "Wrong no of columns",
+										"errorCode": "500"
+									}
+								}
+							],
 							"ifTrueActivities": [
 								{
 									"name": "Copy Population data_copy1",
