@@ -31,6 +31,10 @@
 			"type": "string",
 			"defaultValue": "https://additionalstorageacct.dfs.core.windows.net/"
 		},
+		"ls_http_ecdc_covid_data_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://github.com"
+		},
 		"tr_ingest_population_data_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/74d02aa7-18c6-4ce4-98e6-b7654fdb579f/resourceGroups/ADF_Project/providers/Microsoft.Storage/storageAccounts/additionalstorageacct"
@@ -79,6 +83,9 @@
 					},
 					"LS_StorageAcct_Conn_properties_typeProperties_url": {
 						"value": "[parameters('LS_StorageAcct_Conn_properties_typeProperties_url')]"
+					},
+					"ls_http_ecdc_covid_data_properties_typeProperties_url": {
+						"value": "[parameters('ls_http_ecdc_covid_data_properties_typeProperties_url')]"
 					}
 				}
 			},
