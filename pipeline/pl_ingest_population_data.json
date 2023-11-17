@@ -181,6 +181,9 @@
 			}
 		],
 		"concurrency": 1,
+		"folder": {
+			"name": "ECDC Covid"
+		},
 		"annotations": []
 	}
 }

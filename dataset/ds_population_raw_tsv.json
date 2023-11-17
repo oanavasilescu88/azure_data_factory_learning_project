@@ -5,6 +5,9 @@
 			"referenceName": "LS_StorageAcct_Conn",
 			"type": "LinkedServiceReference"
 		},
+		"folder": {
+			"name": "ECDC Datasets"
+		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
