@@ -423,6 +423,77 @@
 								}
 							}
 						]
+					},
+					{
+						"name": "Lookup ECDC file list",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "JsonSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "JsonReadSettings"
+								}
+							},
+							"dataset": {
+								"referenceName": "ds_ecdc_file_list",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "ForEach1",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Lookup ECDC file list",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Lookup ECDC file list').output.value",
+								"type": "Expression"
+							},
+							"isSequential": true,
+							"activities": [
+								{
+									"name": "Set sourceRelativeURL",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "sourceRelativeURL",
+										"value": {
+											"value": "@item().sourceRelativeURL",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
 					}
 				],
 				"policy": {
@@ -436,6 +507,14 @@
 						"type": "string"
 					}
 				},
+				"variables": {
+					"sourceRelativeURL": {
+						"type": "String"
+					},
+					"sinkFileName": {
+						"type": "String"
+					}
+				},
 				"folder": {
 					"name": "ECDC Covid"
 				},
@@ -443,7 +522,8 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/ds_ecdc_raw_csv_http')]",
-				"[concat(variables('factoryId'), '/datasets/ds_ecdc_raw_csv_dl')]"
+				"[concat(variables('factoryId'), '/datasets/ds_ecdc_raw_csv_dl')]",
+				"[concat(variables('factoryId'), '/datasets/ds_ecdc_file_list')]"
 			]
 		},
 		{
@@ -680,6 +760,43 @@
 						"type": "String"
 					}
 				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_StorageAcct_Conn')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_ecdc_file_list')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_StorageAcct_Conn",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "ECDC Datasets"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "ecdc_file_list.json",
+						"fileSystem": "configs"
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"sourceRelativeURL": {
+							"type": "string"
+						},
+						"sinkFileName": {
+							"type": "string"
+						}
+					}
+				}
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/LS_StorageAcct_Conn')]"
@@ -1571,8 +1688,7 @@
 						"frequency": "Day",
 						"interval": 1,
 						"startTime": "2023-11-17T14:12:00",
-						"timeZone": "W. Europe Standard Time",
-						"schedule": {}
+						"timeZone": "W. Europe Standard Time"
 					}
 				}
 			},

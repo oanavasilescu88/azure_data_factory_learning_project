@@ -25,6 +25,36 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/ds_population_raw_tsv')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_StorageAcct_Conn",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "ECDC Datasets"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "population_by_age_tsv",
+						"folderPath": "population",
+						"fileSystem": "raw"
+					},
+					"columnDelimiter": "\t",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ds_table_synapse_nycpayroll_summary')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -168,6 +198,77 @@
 								}
 							}
 						]
+					},
+					{
+						"name": "Lookup ECDC file list",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "JsonSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "JsonReadSettings"
+								}
+							},
+							"dataset": {
+								"referenceName": "ds_ecdc_file_list",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "ForEach1",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Lookup ECDC file list",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Lookup ECDC file list').output.value",
+								"type": "Expression"
+							},
+							"isSequential": true,
+							"activities": [
+								{
+									"name": "Set sourceRelativeURL",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "sourceRelativeURL",
+										"value": {
+											"value": "@item().sourceRelativeURL",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
 					}
 				],
 				"policy": {
@@ -179,6 +280,14 @@
 					},
 					"sinkFileName": {
 						"type": "string"
+					}
+				},
+				"variables": {
+					"sourceRelativeURL": {
+						"type": "String"
+					},
+					"sinkFileName": {
+						"type": "String"
 					}
 				},
 				"folder": {
@@ -386,7 +495,9 @@
 				},
 				"annotations": []
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_population_raw_tsv')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/dataflow aggregate nyc paroll data')]",
@@ -1240,8 +1351,7 @@
 						"frequency": "Day",
 						"interval": 1,
 						"startTime": "2023-11-17T14:12:00",
-						"timeZone": "W. Europe Standard Time",
-						"schedule": {}
+						"timeZone": "W. Europe Standard Time"
 					}
 				}
 			},
