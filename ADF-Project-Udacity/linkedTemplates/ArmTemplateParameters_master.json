@@ -24,7 +24,7 @@
 			"value": "https://additionalstorageacct.dfs.core.windows.net/"
 		},
 		"ls_http_ecdc_covid_data_properties_typeProperties_url": {
-			"value": "https://github.com"
+			"value": "@{linkedService().sourceBaseURL}"
 		},
 		"tr_ingest_hospital_admissions_data_properties_pl_ingest_ecdc_data_parameters_sourceRelativeURL": {
 			"value": "cloudboxacademy/covid19/raw/main/ecdc_data/hospital_admissions.csv"
