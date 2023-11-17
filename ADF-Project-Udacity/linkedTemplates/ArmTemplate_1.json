@@ -1239,8 +1239,9 @@
 					"recurrence": {
 						"frequency": "Day",
 						"interval": 1,
-						"startTime": "2023-11-17T12:59:00",
-						"timeZone": "W. Europe Standard Time"
+						"startTime": "2023-11-17T13:09:00",
+						"timeZone": "W. Europe Standard Time",
+						"schedule": {}
 					}
 				}
 			},
