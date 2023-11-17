@@ -1,5 +1,5 @@
 {
-	"name": "ds_cases_deaths_raw_csv_http",
+	"name": "ds_ecdc_raw_csv_http",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_http_ecdc_covid_data",
@@ -9,6 +9,9 @@
 			"relativeURL": {
 				"type": "string"
 			}
+		},
+		"folder": {
+			"name": "ECDC Datasets"
 		},
 		"annotations": [],
 		"type": "DelimitedText",
